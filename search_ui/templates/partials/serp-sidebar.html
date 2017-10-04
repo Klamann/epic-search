@@ -1,0 +1,108 @@
+{% block serp_sidebar %}
+<div id="facets" class="sidebar-widget">
+  <ul class="tabs" data-tabs id="tabs-facets">
+    <li class="is-active heading">facets</li>
+    <li class="tabs-title is-active"><a href="#facet-time"><i class="fa fa-calendar" aria-hidden="true"></i> time</a></li>
+    <li class="tabs-title"><a href="#facet-author"><i class="fa fa-user" aria-hidden="true"></i> author</a></li>
+  </ul>
+  <div class="tabs-content" data-tabs-content="tabs-facets">
+    <form id="search-form" action="/search" method="GET">
+      <div class="tabs-panel is-active" id="facet-time">
+        From year
+        <input id="facet-year-from" class="inline filter-input" name="date-after" type="number" min="1900" max="2029" step="1" size="4"{% if 'date_after' in query %} value="{{ query.date_after[:4] }}"{% endif %} />
+        to
+        <input id="facet-year-to" class="inline filter-input" name="date-before" type="number" min="1900" max="2029" step="1" size="4"{% if 'date_before' in query %} value="{{ query.date_before[:4] }}"{% endif %} />
+        <button id="button-submit-date" type="submit" class="button inline" role="button" title="apply filters">
+          <i class='fa fa-search fa-fw'></i>
+        </button>
+        <button id="button-reset-date" type="reset" class="button inline filter-reset" role="button" title="reset filters">
+          <i class='fa fa-refresh fa-fw'></i>
+        </button>
+      </div>
+      <div class="tabs-panel" id="facet-author">
+        by author: <input id="facet-author-input" class="inline filter-input" name="author" type="search" name="search" placeholder="author name"{% if 'author' in query %} value="{{ query.author }}"{% endif %} />
+        <button id="button-submit-author" type="submit" class="button inline" role="button" title="apply filters">
+          <i class='fa fa-search fa-fw'></i>
+        </button>
+        <button id="button-reset-author" type="reset" class="button inline filter-reset" role="button" title="reset filters">
+          <i class='fa fa-refresh fa-fw'></i>
+        </button>
+      </div>
+      {% if sid %}<input type="hidden" name="sid" value="{{ sid }}" />{% endif %}
+      {% if step %}<input type="hidden" name="step" value="{{ step }}" />{% endif %}
+      {% if query.query %}<input type="hidden" name="q" value="{{ query.query }}" />{% endif %}
+    </form>
+  </div>
+</div>
+<div id="topic-centroid" class="sidebar-widget" data-active-collapse="true">
+  <ul class="tabs" data-tabs id="tabs-topic-centroid">
+    <li class="is-active heading">topic centroid</li>
+    <li class="tabs-title"><a href="#topic-centroid-graph"><i class="fa fa-area-chart" aria-hidden="true"></i> graph</a></li>
+    <li class="tabs-title is-active"><a href="#topic-centroid-list"><i class="fa fa-list" aria-hidden="true"></i> list</a></li>
+  </ul>
+  <div class="tabs-content" data-tabs-content="tabs-topic-centroid">
+    <div class="tabs-panel" id="topic-centroid-graph">
+      <p>coming soon :)</p>
+    </div>
+    <div class="tabs-panel is-active" id="topic-centroid-list">
+      <ul class="topic-list">
+        {% with arg_topics=topic_centroid[:10] %}
+        {% include 'partials/topic-list.html' %}
+        {% endwith %}
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="bookmarks" class="sidebar-widget">
+  <ul class="tabs" data-tabs id="tabs-bookmarks" data-active-collapse="true">
+    <li class="is-active heading">saved results</li>
+    <li class="tabs-title is-active"><a href="#bookmarks-personal"><i class="fa fa-user-circle-o" aria-hidden="true"></i> personal</a></li>
+    <li class="tabs-title"><a href="#bookmarks-group"><i class="fa fa-users" aria-hidden="true"></i> group</a></li>
+  </ul>
+  <div class="tabs-content" data-tabs-content="tabs-bookmarks">
+    <div class="tabs-panel is-active" id="bookmarks-personal">
+      <p class="hint-empty">You can save a search result for later by clicking the star button next to it. Saved results will appear in this box. You can move an item to a different position in the list by clicking and dragging it.</p>
+      <div class="bookmark-buttons" style="display: none">
+        <button class="button inline bookmarks-copy" role="button" title="copy saved search results to clipboard">copy</button>
+        <button class="button inline bookmarks-clear" role="button" data-open="confirm-clear-bookmarks" title="clear all saved search results">clear all</button>
+        <div class="reveal" id="confirm-clear-bookmarks" data-reveal>
+          <h1>Clear all bookmarks</h1>
+          <p>You are about to remove all bookmarks that you have saved. This cannot be undone. Do you want to continue?</p>
+          <button class="button" data-close id="clear-bookmarks">OK</button>
+          <button class="button" data-close>Cancel</button>
+          <button class="close-button" data-close aria-label="Close reveal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="bookmark-list-wrapper">
+        <ul class="bookmark-list"></ul>
+      </div>
+    </div>
+    <div class="tabs-panel" id="bookmarks-group">
+      <p>collaborative search is not yet supported</p>
+    </div>
+  </div>
+</div>
+<div id="suggestions" class="sidebar-widget">
+  <ul class="tabs" data-tabs id="tabs-suggestions" data-active-collapse="true">
+    <li class="is-active heading">suggested search results</li>
+    <li class="tabs-title is-active"><a href="#suggestions-personal"><i class="fa fa-user-circle-o" aria-hidden="true"></i> personal</a></li>
+    <li class="tabs-title"><a href="#suggestions-group"><i class="fa fa-users" aria-hidden="true"></i> group</a></li>
+  </ul>
+  <div class="tabs-content" data-tabs-content="tabs-suggestions">
+    <div class="tabs-panel is-active" id="suggestions-personal">
+      {% if suggestions and suggestions|length > 0 %}
+      {% with results=suggestions[:10], list_id="suggestions-list" %}
+      {% include 'partials/serp-list.html' %}
+      {% endwith %}
+      {% else %}
+      <p>there are no suggestions for this query</p>
+      {% endif %}
+    </div>
+    <div class="tabs-panel" id="suggestions-group">
+      <p>collaborative search is not yet supported</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

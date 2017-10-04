@@ -1,0 +1,72 @@
+{% block serp_list %}
+<ul id="{{ list_id }}">
+{% for hit in results %}
+  <li id="d-{{ hit.id }}" class="result-entry" data-doc-id="{{ hit.id }}" data-title="{{ hit.title|striptags }}" data-url="{{ hit.url }}" data-year="{{ hit.date[:4] }}" data-authors="{{ '|'.join(hit.authors[:5]) }}" >
+    <span class="fa-stack result-star">
+      <i class="fa fa-star fa-stack-1x"></i>
+      <i class="fa fa-star-o fa-stack-1x"></i>
+    </span>
+    <h3 class="result-title"><a href="{{ hit.url }}" target="_blank">{{ hit.title }}</a></h3>
+    <div class="result-authors">
+      {% set comma = joiner("; ") %}
+      {% for author in hit.authors[:4] %}{{ comma() }}<a href="/search?sid={{ sid }}&author={{ author|urlencode }}"><span class="author">{{ author }}</span></a>{% endfor %}{% if hit.authors|length > 4 %}, <a href="{{ hit.url }}">…</a>{% endif %} - {{ hit.date[:4] }}
+    </div>
+    <div class="result-snippets">{{ hit.snippets }}</div>
+    <div class="result-links">
+      <div tabindex="0" class="dropdown">
+        <i class="fa fa-file-text-o" aria-hidden="true"></i> abstract
+        <div class="result-abstract dropdown-content">{{ hit.abstract }}</div>
+      </div>
+      <div tabindex="0" class="dropdown">
+        <i class="fa fa-eye" aria-hidden="true"></i> preview
+        <div class="result-preview dropdown-content">{{ hit.preview }}</div>
+      </div>
+      <div tabindex="0" class="dropdown">
+        <i class="fa fa-pie-chart" aria-hidden="true"></i> topics
+        <div class="result-topics dropdown-content">
+          {% if hit.topics %}
+            <ul class="topic-list">
+              {% with arg_topics=hit.topics[:10] %}
+              {% include 'partials/topic-list.html' %}
+              {% endwith %}
+            </ul>
+          {% else %}
+            <p>there are no topics available for this document</p>
+          {% endif %}
+        </div>
+      </div>
+      <div tabindex="0" class="dropdown">
+        <i class="fa fa-info" aria-hidden="true"></i> about
+        <div class="result-info dropdown-content">
+          <table>
+            <tr>
+              <td>arxiv-id</td>
+              <td><a href="{{ hit.url }}" target="_blank">{{ hit.id }}</a></td>
+            </tr>
+            <tr>
+              <td>url</td>
+              <td><a href="{{ hit.url }}" target="_blank">{{ hit.url }}</a></td>
+            </tr>
+            <tr>
+              <td>title</td>
+              <td>{{ hit.title|striptags }}</td>
+            </tr>
+            <tr>
+              <td>authors</td>
+              <td>{% set comma = joiner("; ") %}{% for author in hit.authors %}{{ comma() }}<a href="/search?sid={{ sid }}&author={{ author|urlencode }}"><span class="author">{{ author }}</span></a>{% endfor %}</td>
+            </tr>
+            <tr>
+              <td>score</td>
+              <td>{{ hit.score }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <a href="{{ hit.url.replace('/abs/', '/pdf/') + '.pdf' }}" target="_blank">
+        <i class="fa fa-file-pdf-o" aria-hidden="true" style="color: #e11"></i> PDF
+      </a>
+    </div>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

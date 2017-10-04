@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="centered">
+  <div class="centered-content">
+    <h1 id="search-heading" class="startpage"><span class="arxiv">epic</span> search <span class="note">(working title) </span><span class="version">prototype</span></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 medium-9 medium-centered large-6 large-centered columns">
+    <form id="search-form" action="/search" method="GET">
+      <div class="input-group">
+        <input id="search-input" class="input-group-field" type="text" name="q">
+        <div class="input-group-button">
+          <button id="button-submit" type="submit" class="button" role="button" aria-label="submit form">
+            <i class='fa fa-search fa-fw'></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

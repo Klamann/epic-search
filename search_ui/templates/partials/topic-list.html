@@ -1,0 +1,5 @@
+{% for topic in arg_topics %}
+<li class="topic-item">
+  <div class="title">topic <span class="topic-id">{{ topic.id }}</span>. score: <span class="topic-score">{{ topic.score|round(3) }}</span></div>
+  <div class="tokens">{% set comma = joiner(", ") %}{% for token, score in topic.tokens %}{{ comma() }}<span class="topic-token" title="score: {{ score }}">{{ token }}</span>{% endfor %}</div>
+</li>{% endfor %}

@@ -1,0 +1,4 @@
+.webassets-cache
+*.zip
+bundle*
+!lib

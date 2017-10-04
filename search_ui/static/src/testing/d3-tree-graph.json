@@ -1,0 +1,148 @@
+{
+  "links": [
+    {
+      "source": 0,
+      "target": 1
+    },
+    {
+      "source": 0,
+      "target": 2
+    },
+    {
+      "source": 3,
+      "target": 4
+    },
+    {
+      "source": 3,
+      "target": 5
+    },
+    {
+      "source": 6,
+      "target": 0
+    },
+    {
+      "source": 6,
+      "target": 3
+    }
+  ],
+  "nodes": [
+    {
+      "fixed": true,
+      "name": "cs-4",
+      "score": 0,
+      "tokens": [
+        "image",
+        "base",
+        "system",
+        "protocol",
+        "datum",
+        "propose",
+        "security",
+        "privacy",
+        "quantum",
+        "attack"
+      ],
+      "x": 241,
+      "y": 200
+    },
+    {
+      "name": "cs-4-7-9",
+      "score": 0.434,
+      "tokens": [
+        "detection",
+        "provide",
+        "user",
+        "graph",
+        "base",
+        "peer",
+        "tree",
+        "system",
+        "query",
+        "security"
+      ],
+      "x": 150,
+      "y": 630
+    },
+    {
+      "name": "cs-4-9-10",
+      "score": 0.531,
+      "tokens": [
+        "quantum",
+        "algorithm",
+        "key",
+        "protocol",
+        "base",
+        "classical",
+        "propose",
+        "paper",
+        "system",
+        "security"
+      ],
+      "x": 383,
+      "y": 630
+    },
+    {
+      "fixed": true,
+      "name": "physics-2",
+      "score": 0,
+      "tokens": [
+        "quantum",
+        "state",
+        "system",
+        "time",
+        "method",
+        "entanglement",
+        "network",
+        "distribution",
+        "information",
+        "not"
+      ],
+      "x": 759,
+      "y": 200
+    },
+    {
+      "name": "physics-2-6-9",
+      "score": 0.663,
+      "tokens": [
+        "quantum",
+        "time",
+        "theory",
+        "space",
+        "state",
+        "classical",
+        "mechanic",
+        "relativistic",
+        "field",
+        "entanglement"
+      ],
+      "x": 616,
+      "y": 630
+    },
+    {
+      "name": "physics-2-7-16",
+      "score": 0.909,
+      "tokens": [
+        "quantum",
+        "key",
+        "entanglement",
+        "security",
+        "information",
+        "protocol",
+        "distribution",
+        "state",
+        "secret",
+        "scheme"
+      ],
+      "x": 849,
+      "y": 630
+    },
+    {
+      "fixed": true,
+      "name": "root",
+      "score": 0,
+      "tokens": null,
+      "x": 500,
+      "y": 100
+    }
+  ]
+}

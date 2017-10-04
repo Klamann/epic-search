@@ -1,0 +1,9 @@
+{#
+return a minimalist page, with just the search results (but same page structure, for compatibility)
+#}
+<p>Whoops, you should not have gotten here. Please go <a href="#" onclick="window.history.go(-1); return false;">one step back</a> or <a href="/">return to the startpage</a></p>
+<div id="result-raw" style="display: none">
+{% with results=hits, list_id="result-list" %}
+{% include 'partials/serp-list.html' %}
+{% endwith %}
+</div>

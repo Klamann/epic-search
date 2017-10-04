@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    {"name": "d3", "x": 200, "y": 20 },
+    {"name": "d3.svg", "x": 100, "y": 120 },
+    {"name": "d3.svg.area", "x": 50, "y": 220},
+    {"name": "d3.svg.line", "x": 150, "y": 220},
+    {"name": "d3.scale", "x": 300, "y": 120},
+    {"name": "d3.scale.linear", "x": 250, "y": 220},
+    {"name": "d3.scale.ordinal", "x": 350, "y": 220}
+  ],
+  "links": [
+    {"source": 0, "target": 1},
+    {"source": 1, "target": 2},
+    {"source": 1, "target": 3},
+    {"source": 0, "target": 4},
+    {"source": 4, "target": 5},
+    {"source": 4, "target": 6}
+  ]
+}

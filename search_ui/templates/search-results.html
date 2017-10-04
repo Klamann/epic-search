@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="small-12 columns">
+    <h1 id="search-heading"><a href="/"><span class="arxiv">epic</span> search <span class="note">(working title) </span><span class="version">prototype</span></a></h1>
+  </div>
+</div>
+
+<form id="search-form" action="/search" method="GET">
+  <div class="row">
+    <div id="search-bar" class="medium-8 small-12 columns end">
+      <input id="search-input" type="text" name="q" placeholder="search..." value="{% if query %}{{ query.query }}{% endif %}" style="height: 2.58rem" required>
+      {% if sid %}<input type="hidden" name="sid" value="{{ sid }}" />{% endif %}
+      {% if step %}<input type="hidden" name="step" value="{{ step }}" />{% endif %}
+      {% if 'date_after' in query %}<input type="hidden" name="date-after" class="filter-input" value="{{ query.date_after[:4] }}" />{% endif %}
+      {% if 'date_before' in query %}<input type="hidden" name="date-before" class="filter-input" value="{{ query.date_before[:4] }}" />{% endif %}
+      <button id="button-submit" type="submit" class="button postfix" role="button" aria-label="submit form">
+        <i class='fa fa-search fa-fw'></i>
+      </button>
+      <a id="button-reset" class="button" href="/search" style="white-space: nowrap;">
+        <i class="fa fa-refresh" aria-hidden="true"></i><span style="margin-left: 3pt"> reset</span>
+      </a>
+    </div>
+  </div>
+</form>
+
+<div id="search-results">
+  {% block search_results %}
+  {% if query_history and query_history|length > 1 %}
+  <div id="query-history" class="breadcrumb">
+    {% for q in query_history %}
+      {% if loop.last %}
+    <a href="#" class="active">{{ q.query or q.author }}</a>
+      {% else %}  {# the whole &prev business is a mess and needs fixing... #}
+    <a href="?q={{ q.query|urlencode if q.query != None else '' }}{% if q.author %}&author={{ q.author|urlencode }}{% endif %}&sid={{ sid }}&step={{ q.step }}">{{ q.query or q.author }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if spellcheck and spellcheck|length > 0 %}
+  <div id="did-you-mean">
+    <p>Did you mean <a href="?q={{ spellcheck|striptags }}&spelling=true&sid={{ sid }}&step={{ step }}">{{ spellcheck }}</a><span style="margin-left: 0.2em;">?</span></p>
+  </div>
+  {% endif %}
+
+  {% if hits and hits|length > 0 %}
+  <p id="result-summary"><em>found {{ total }}</em> document{% if hits|length > 1 %}s{% endif %} in <em>{{ took/1000 }}</em> seconds.</p>
+  {% else %}
+  <p id="result-failure"><em>{{ message }}</em></p>
+  {% endif %}
+
+  <div id="results-wrapper" class="row">
+    {#
+    <div id="sidebar-off" class="sidebar-toggle" data-toggler="hide"><a data-toggle="result-sidebar result-list-wrapper sidebar-on sidebar-off"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a></div>
+    <div id="sidebar-on" class="sidebar-toggle hide" data-toggler="hide"><a data-toggle="result-sidebar result-list-wrapper sidebar-on sidebar-off"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i></a></div>
+    #}
+    <div id="result-sidebar" class="medium-5 medium-push-7 columns" data-toggler="hide medium-5 medium-push-7 medium-0">
+      {% if (hits and hits|length > 0) or (topic_centroid and topic_centroid|length > 0) or (suggestions and suggestions|length > 0) %}
+        {% include 'partials/serp-sidebar.html' %}
+      {% endif %}
+    </div>
+    <div id="result-list-wrapper" class="medium-7 medium-pull-5 columns" data-toggler="medium-7 medium-pull-5 medium-9 medium-pull-3" >
+      {% if hits and hits|length > 0 %}
+        {% with results=hits, list_id="result-list" %}
+          {% include 'partials/serp-list.html' %}
+        {% endwith %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="results-bottom" class="text-center">
+    {% if query %}<a id="results-more" role="button" href="/search?q={{ query.query }}&size={{ query.size + 10 }}" class="button">show more results</a>
+    <div id="results-loading" style="visibility: hidden;"><i class="fa fa-cog fa-spin fa-3x fa-fw"></i> <span class="sr-only">Loading more results</span></div>{% endif %}
+  </div>
+  {% endblock %}
+</div>
+
+{% if query %}
+<script type=text/javascript>
+  const query = {{ query|tojson|safe }};
+  const sid = "{{ sid|safe }}";
+  const step = {{ step|safe }};
+  {% if topic_graph %}
+  const topicGraph = {{ topic_graph|tojson|safe }};
+  {% endif %}
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,108 @@
+@import 'constants';
+
+
+/* inline buttons */
+
+input.inline, button.inline {
+  display: inline;
+  width: auto;
+  height: auto;
+  padding: 0.2rem;
+  margin: 0 0.2rem;
+  vertical-align: middle;
+}
+
+button.inline {
+  padding: 0.4rem 0.6rem;
+}
+
+
+/* dropdown popup (was pure css once, but it had issues, so now it's javascript...) */
+
+.dropdown {
+  display: inline-block;
+}
+
+.dropdown:hover {
+  /* indicate that this is clickable */
+  cursor: pointer;
+}
+
+.dropdown:focus {
+  /* highlight the selected button and don't draw a border around it... */
+  outline:0;
+  background: $color-link-bg;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  /* regular styling */
+  background: white;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.dropdown-content:hover {
+  /* reset the cursor (do not inherit from button) */
+  cursor: auto;
+}
+
+
+/* read more/less */
+
+a.readmore {
+  display: block;
+  text-align: center;
+  line-height: 0;
+  color: #555 !important;
+  .fa {
+    font-size: 2.5rem;
+    line-height: 0.8rem;
+  }
+}
+
+a.r-expand {
+  border-top: 3px double #555;
+  margin-bottom: 0.2rem;
+}
+
+a.r-collapse {
+  border-bottom: 3px double #555;
+  margin-top: 0.3rem;
+}
+
+
+/* zurb foundation's reveal: http://foundation.zurb.com/sites/docs/reveal.html */
+
+.reveal {
+  h1 {
+    font-size: 1.8em;
+  }
+  button {
+    margin: 0 0.5em 0 0;
+  }
+}
+
+
+/* random generic css */
+
+.centered {
+  text-align: center;
+}
+
+.centered-content {
+  margin: auto;
+  position: relative;
+  > * {
+    display: inline-block;
+  }
+}
+
+.input-group-field {
+  /* fix for wrong height value in zurb */
+  height: 2.56rem;
+}

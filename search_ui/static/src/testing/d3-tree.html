@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle {
+  stroke-width: 1.5px;
+}
+
+line {
+  stroke: #999;
+  stroke-width: 1.5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+text {
+  cursor: default;
+  font-family: "Lato", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+
+text.token {
+  font-size: 35px;
+  font-style: italic;
+  /*font-weight: 200;*/
+}
+
+#svg-container {
+  overflow: scroll;
+  overflow-x: hidden;
+  border: 1px solid black;
+}
+
+</style>
+<body>
+  <div id="svg-container"></div>
+</body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+  let aspectRatio = 1.45;
+  let yMulti = Math.round((1.0 / aspectRatio) * 1000) / 1000;
+  let width = 1000;
+  let height = width * yMulti;
+
+  var svg = d3.select("#svg-container").append("svg")
+    .attr("width", "100%")
+    //.attr("height", "100%")
+    .attr("viewBox", "0 0 1000 " + 1000*yMulti)
+    .attr("preserveAspectRatio", "xMidYMin")
+    .attr("style", "border: 1px dashed red;");
+
+  var force = d3.layout.force()
+    .linkDistance(150)
+    .linkStrength(0.1)
+    .friction(0.93)
+    .charge(-1500)
+    .chargeDistance(500)
+    .gravity(0.03)
+    .size([width, height]);
+
+  var drag = force.drag()
+    .on("dragstart", dragstart);
+
+d3.json("d3-tree-graph.json", function(error, json) {
+  if (error) throw error;
+
+  // adjust y positions according to the selected aspect ratio
+  json.nodes.forEach(function(d) {
+    d.y = Math.round(d.y * yMulti)
+  });
+
+  force
+    .nodes(json.nodes)
+    .links(json.links)
+    .start();
+
+  var link = svg.selectAll(".link")
+    .data(json.links)
+    .enter().append("line")
+    .attr("class", "link");
+
+  var node = svg.selectAll(".node")
+    .data(json.nodes)
+    .enter().append("g")
+    .attr("class", "node")
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .call(force.drag);
+
+  node.append("circle")
+    .attr({"r":45})
+    .style("fill",function(d,i){return "#a1eeb6";});
+
+  // name
+  node.append("text")
+    .attr("dy", -5)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#fff")
+    .attr("font-size", 30)
+    .attr("font-weight", "bold")
+    .classed("name", true)
+    .text(function(d) {
+      // shorten the name
+      let idx = d.name.indexOf("-");
+      return idx > 0 ? d.name.slice(0,2) : d.name;
+    });
+
+  // sub-name (optional)
+  node.append("text")
+    .attr("dy", 20)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#fff")
+    .attr("font-size", 22)
+    .classed("name", true)
+    .text(function(d) {
+      // shorten the name
+      let idx = d.name.indexOf("-");
+      return idx > 0 ? d.name.slice(idx+1) : null;
+    });
+
+  for (let i=0; i<6; i++) {
+    let xOffset = (i%3) === 1 ? 55 : 45;
+    let dx = i<3 ? xOffset : -xOffset;
+    let dy = -26 + (i%3) * 35;
+    node.append("text")
+      .attr("dx", dx)
+      .attr("dy", dy)
+      .attr("text-anchor", i<3 ? "start" : "end")
+      .classed("token", true)
+      .text(function(d) {
+        if (d.tokens instanceof Array && d.tokens.length > i) {
+          let text = d.tokens[i];
+          return text.length > 12 ? text.slice(0,10) + "…" : text;
+        } else {
+          return null;
+        }
+      });
+  }
+
+  force.on("tick", function(e) {
+    var k = 6 * e.alpha;
+
+    json.links.forEach(function(d, i) {
+      d.source.y -= k;
+      d.target.y += k;
+    });
+
+    link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+
+  function dragstart(d) {
+    d.fixed = true;
+    d3.select(this).classed("fixed", true);
+  }
+
+</script>

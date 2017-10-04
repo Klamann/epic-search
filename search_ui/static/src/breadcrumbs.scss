@@ -1,0 +1,79 @@
+
+/* configuration */
+$font-size: 12px;
+$height: 24px;
+$color-background: white;
+$color-active: rgb(255, 188, 179);
+$color-font: black;
+$border-radius: 5px;
+
+
+.breadcrumb {
+  display: inline-block;
+  border: 0.5px solid #aaa;
+  overflow: hidden;
+  border-radius: $border-radius;
+
+  a {
+    text-decoration: none;
+    outline: none;
+    display: block;
+    float: left;
+    font-size: $font-size;
+    line-height: $height;
+    color: $color-font;
+    padding: 0 10px 0 $height;
+    background: $color-background;
+    transition: all 0.5s;
+    position: relative;
+
+    &:first-child {
+      padding-left: $height / 2;
+      border-radius: $border-radius 0 0 $border-radius;  /*to match with the parent's radius*/
+    }
+
+    &:last-child {
+      border-radius: 0 $border-radius $border-radius 0; /*this was to prevent glitches on hover*/
+      padding-right: $height / 2;
+    }
+
+    &.active, &:hover, &.active:after, &:hover:after {
+      background: $color-active;
+    }
+
+    /* adding the arrows for the breadcrumbs using rotated pseudo elements */
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      /* same dimension as the line-height of .breadcrumb a */
+      width: $height;
+      height: $height;
+      /* half of square's length */
+      right: -0.5 * $height;
+      /* as you see the rotated square takes a larger height. which makes it tough to position it properly. So we are going to scale it down so that the diagonals become equal to the line-height of the link. We scale it to 70.7% because if square's:
+      length = 1; diagonal = (1^2 + 1^2)^0.5 = 1.414 (pythagoras theorem)
+      if diagonal required = 1; length = 1/1.414 = 0.707 */
+      transform: scale(0.707) rotate(45deg);
+      /*we need to prevent the arrows from getting buried under the next link*/
+      z-index: 1;
+      background: $color-background;
+      /*stylish arrow design using box shadow*/
+      box-shadow:
+              2px -2px 0 2px rgba(0, 0, 0, 0.4),
+              3px -3px 0 2px rgba(255, 255, 255, 0.1);
+      /* add large radius to prevent hover glitches on the border created using shadows*/
+      border-radius: 0 $border-radius 0 $height*2;
+      transition: all 0.5s;
+    }
+
+    &:before {
+      box-shadow: 0 0 0 1px #ccc;
+    }
+
+    /* we don't need an arrow after the last link */
+    &:last-child:after {
+      content: none;
+    }
+  }
+}

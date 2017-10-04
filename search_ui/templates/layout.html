@@ -1,0 +1,56 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if query and query.query and query.query|length > 0 %}{{ query.query }} - {% endif %}epic search</title>
+    <link rel="icon" href="favicon.ico" />
+    {% assets filters="pyscss", output=".webassets-cache/app.css", "src/*.scss" %}{% endassets %}
+    {% assets filters="cssmin", output="bundle.css",
+       "lib/css/font-awesome.css", "lib/css/font-lato.css", "lib/css/font-sourcecodepro.css", "lib/css/foundation.min.css", ".webassets-cache/app.css" %}
+    <link rel=stylesheet type=text/css href="{{ ASSET_URL }}">
+    {% endassets %}
+  </head>
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
+<div class="row">
+  <div class="large-12 columns">
+    {% for category, message in messages %}
+    <div class="{{ category }} callout" data-closable>
+      <span>{{ message }}</span>
+      <button class="close-button" type="button" data-close>&times;</button>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}{% endwith %}
+{% block noscript %}
+<noscript>
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="noscript warning callout" data-closable>
+        It looks like you don't have JavaScript enabled. You can use this site without JavaScript, but some things might not work as expected 😢
+      </div>
+    </div>
+  </div>
+</noscript>
+{% endblock %}
+
+<div id="main" class="row">
+  <div class="large-12 columns">
+{% block body %}{% endblock %}
+  </div>
+</div>
+
+{% if query and hits and hits|length > 0 %}<div id="footer" style="display: none">
+  <p>please scroll down to load more results</p>
+</div>{% endif %}
+
+{% assets filters="jsmin", output="bundle.js",
+   "lib/js/jquery.min.js", "lib/js/what-input.js", "lib/js/readmore.min.js", "lib/js/localforage.min.js", "lib/js/html.sortable.min.js", "lib/js/clipboard.min.js", "lib/js/d3.v3.min.js", "lib/js/foundation.min.js", "src/*.js" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+</body>
+</html>
