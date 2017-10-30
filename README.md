@@ -4,7 +4,7 @@
 
 Session-based search means that we include previous queries from the user's query history into an expanded search query, so that we can interpret the user's requests in context. *Semantic* means that we don't just use keyword matching to get search results, but also rely on probabilistic topic models to find relevant search results. Our goal is to support the user in complex exploratory search tasks.
 
-The concepts are described in detail in the thesis *Towards Collaborative Session-based Semantic Search* (soon to be published).
+The concepts are described in detail in the thesis *[Towards Collaborative Session-based Semantic Search](http://nbn-resolving.de/urn:nbn:de:bsz:14-qucosa-229549)* by Sebastian Straub.
 
 The prototype of the search engine consists of a web application written in Python 3 that uses the micro web framework [Flask](http://flask.pocoo.org/) to process queries and serve search results.
 
